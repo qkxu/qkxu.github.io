@@ -104,7 +104,7 @@ if (virQEMUCapsGet(qemuCaps, QEMU_CAPS_KVM)) {
 
 查询过程中可以看到cache就一直存在，查看cache的源头，只能从libvirt初始化的定位查询
 
-```
+```sh
 Breakpoint 1, virQEMUCapsCacheLookup (cache=cache@entry=0x7fffc0136b50, binary=0x7fffc0155b40 "/usr/libexec/qemu-kvm") at qemu/qemu_capabilities.c:4855
 4855	{
 (gdb) bt
@@ -122,7 +122,7 @@ Breakpoint 1, virQEMUCapsCacheLookup (cache=cache@entry=0x7fffc0136b50, binary=0
 
 在libvirt初始化时，会执行virQEMUCapsCacheLookup，进而执行virFileCacheValidate
 
-```
+```c
 static void
 virFileCacheValidate(virFileCachePtr cache,
                      const char *name,
@@ -153,7 +153,7 @@ virFileCacheValidate(virFileCachePtr cache,
 
 cache的生成
 
-```
+```c
 static void *
 virFileCacheNewData(virFileCachePtr cache,
                     const char *name)
@@ -257,13 +257,13 @@ virsh capabilities中返回的项目比较多，当遇到具体的capabilities�
 
 了解了cache以后就按部就班的定位问题了，qemuMonitorJSONGetKVMState中执行了qpm命令（query-kvm）进行查询，手动模拟libvirt重启时的进程启动过程
 
-```
+```sh
 /usr/libexec/qemu-kvm -S -no-user-config -nodefaults -nographic -machine none,accel=kvm:tcg -qmp unix:/var/lib/libvirt/qemu/capabilities.monitor.sock,server,nowait -pidfile /var/lib/libvirt/qemu/capabilities.pidfile -daemonize
 ```
 
 针对qemu monitor启动的方式不同，有不同的连接方式：
 
-```
+```sh
 # qemu monitor采用tcp方式，监听在127.0.0.1上，端口为4444
 /usr/libexec/qemu-kvm -qmp tcp:127.0.0.1:4444,server,nowait
 
@@ -273,7 +273,7 @@ virsh capabilities中返回的项目比较多，当遇到具体的capabilities�
 
 连接qemu monitor：
 
-```
+```sh
 # tcp可以通过telnet进行连接，方法如下
 > telnet 127.0.0.1 1234
 Trying 127.0.0.1...
@@ -287,13 +287,13 @@ Escape character is '^]'.
 
 连接后就处于等待状态，但是还不能使用，必须先执行下如下命令，然后再执行其他的qmp命令即可。
 
-```
+```sh
 { "execute" : "qmp_capabilities" }
 ```
 
 执行命令查看返回值:
 
-```
+```sh
 {"execute":"query-kvm"}
 {"return": {"enabled": false, "present": true}}
 ```
