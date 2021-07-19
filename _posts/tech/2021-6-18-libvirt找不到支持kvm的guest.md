@@ -379,13 +379,120 @@ static int kvm_init(MachineState *ms)
 
 如果其中有返回错误，即ret < 0  则将allowed置为false，即返回给libvirt的enabled值为false。
 
-而/dev/kvm设备是由内核模块kvm_intel加载而来的，所以怀疑是硬件与内核的兼容性不好，概率性导致加载kvm module 时并不可用。
+打开libvirt debug级别日志，在日志中可以看到：
+
+```
+21587 Could not access KVM kernel module: Permission denied
+21588 qemu-kvm: failed to initialize KVM: Permission denied
+21589 qemu-kvm: Back to tcg accelerator
+```
+
+即打开kvm时没有权限。
+
+```sh
+ll /dev/kvm 
+crw-rw-rw-+ 1 root kvm 10, 232 Jul 14 00:32 /dev/kvm
+```
+
+可以看到文件权限最后有个+号，即启用了linux acl控制（可用getfacl与getfacl管理）：
+
+```sh
+getfacl /dev/kvm
+getfacl: Removing leading '/' from absolute path names
+# file: dev/kvm
+# owner: root
+# group: kvm
+user::rw-
+group::---
+mask::rw-
+other::rw-
+```
+
+可以看到kvm所属的组的权限为空，而qemu属于kvm group所以导致了没有权限。
+
+而/dev/kvm设备是由内核模块kvm_intel加载而来的，ll可以看到kvm的主次设备号为：10,232，查看主设备对应的关系为
+
+```
+cat /proc/devices 
+Character devices:
+  1 mem
+  4 /dev/vc/0
+  4 tty
+  4 ttyS
+  5 /dev/tty
+  5 /dev/console
+  5 /dev/ptmx
+  7 vcs
+ 10 misc
+ 13 input
+ 21 sg
+...
+```
+
+即kvm设备是个misc设备，查看内核代码可以看到kvm确实是注册到misc字符设备驱动中的，并在include/linux/miscdevice.h中定义了从设备号#define KVM_MINOR		232
+
+默认加载kvm module 时的权限为：
+
+```
+ll /dev/kvm 
+crw------- 1 root root 10, 232 Jul 18 23:06 /dev/kvm
+```
+
+当安装后qemu后，在spec安装脚本中可以看到，对于kvm设备权限做了几件事：
+
+1. 添加相关组与权限
+
+   ```
+   getent group kvm >/dev/null || groupadd -g 36 -r kvm
+   getent group qemu >/dev/null || groupadd -g 107 -r qemu
+   getent passwd qemu >/dev/null || \
+   useradd -r -u 107 -g qemu -G kvm -d / -s /sbin/nologin \
+     -c "qemu user" qemu
+   ```
+
+2. 将80-kvm.rules写入udev文件中，这个后续重启自动生效，本地生效参见步骤3，而80-kvm.rules内容为：
+
+    ```
+    KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"
+    ```
+
+   即把kvm设备的group修改为kvm，并将权限置为666
+
+3. 然后执行udev更新命令,因为步骤2中已经写入了新的rules，所以加载后生效
+
+   ```
+   %udev_rules_update
+   sh %{_sysconfdir}/sysconfig/modules/kvm.modules &> /dev/null || :
+       udevadm trigger --subsystem-match=misc --sysname-match=kvm --action=add || :
+   ```
+
+   当然从rpm包中可以直接看到
+
+   ```sh
+   rpm -qp --scripts qemu-kvm-ev-2.12.0-33.1.fh.3.4.el7.x86_64.rpm
+   postinstall scriptlet (using /bin/sh):
+   # load kvm modules now, so we can make sure no reboot is needed.
+   # If there's already a kvm module installed, we don't mess with it
+   
+   udevadm control --reload >/dev/null 2>&1 || : 
+   
+   sh /etc/sysconfig/modules/kvm.modules &> /dev/null || :
+       udevadm trigger --subsystem-match=misc --sysname-match=kvm --action=add || :
+   ```
+
+从整个过程来说，并没有主动添加acl权限的动作，又没办法重启调试（重启现象消失），所以怀疑是硬件与内核的兼容性不好，采用规避性方案：
 
 根据分析，重新加载kvm module 
 
 ```sh
 modprobe -r kvm_intel
 modprobe kvm_intel
+```
+
+或者手动执行setfacl将acl规则去掉
+
+```
+setfacl -b /dev/kvm
 ```
 
 重新执行virsh capabilities可以看到\<domain type='kvm'/>（不需要重启libvirt，原因是获取cache时，isValid会校验/dev/kvm的属性变化，导致校验失败，会触发重新生成cache）
