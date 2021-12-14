@@ -489,10 +489,12 @@ modprobe -r kvm_intel
 modprobe kvm_intel
 ```
 
-或者手动执行setfacl将acl规则去掉
+或者手动执行setfacl将acl规则去掉，当然也可以添加组权限
 
 ```
 setfacl -b /dev/kvm
+or
+setfacl -m g::rw /dev/kvm
 ```
 
 重新执行virsh capabilities可以看到\<domain type='kvm'/>（不需要重启libvirt，原因是获取cache时，isValid会校验/dev/kvm的属性变化，导致校验失败，会触发重新生成cache）
