@@ -480,7 +480,22 @@ crw------- 1 root root 10, 232 Jul 18 23:06 /dev/kvm
        udevadm trigger --subsystem-match=misc --sysname-match=kvm --action=add || :
    ```
 
-从整个过程来说，并没有主动添加acl权限的动作，又没办法重启调试（重启现象消失），所以怀疑是硬件与内核的兼容性不好，采用规避性方案：
+从整个过程来说，并没有主动添加acl权限的动作。
+
+到/usr/lib/udev/rules.d目录下寻找与kvm相关的rules；
+
+```sh
+grep kvm * 
+70-uaccess.rules:SUBSYSTEM=="misc", KERNEL=="kvm", TAG+="uaccess"
+80-kvm.rules:KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"
+81-kvm-rhel.rules:DEVPATH=="*/kvm", ACTION=="change", RUN+="/lib/udev/udev-kvm-check $env{COUNT} $env{EVENT}"
+```
+
+没有看到去掉group相关的权限设置
+
+### 规避方式
+
+由于没办法重启调试（重启现象消失），所以怀疑是硬件与内核的兼容性不好，采用规避性方案：
 
 根据分析，重新加载kvm module 
 
@@ -489,7 +504,7 @@ modprobe -r kvm_intel
 modprobe kvm_intel
 ```
 
-或者手动执行setfacl将acl规则去掉，当然也可以添加组权限
+或者手动执行setfacl将acl规则去掉，当然也可以添加组权限（可以放到qmeu安装post脚本中）
 
 ```
 setfacl -b /dev/kvm
@@ -499,7 +514,7 @@ setfacl -m g::rw /dev/kvm
 
 重新执行virsh capabilities可以看到\<domain type='kvm'/>（不需要重启libvirt，原因是获取cache时，isValid会校验/dev/kvm的属性变化，导致校验失败，会触发重新生成cache）
 
-这里其实只是暂时规避方案，因为发生的概率特别小，不容易复现，真正具体的原因还需要研究内核代码以及服务器厂商配合定位。
+这里其实只是暂时规避方案，因为发生的概率特别小，不容易复现，真正具体的原因还需要研究内核代码。
 
 
 
