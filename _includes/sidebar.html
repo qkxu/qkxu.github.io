@@ -12,8 +12,8 @@
 
     <ul id="sidebar-tags">
       <li class="sidebar-tag active" data-filter="recent">最新文章</li>
-      {% if site.filter == 'category' reversed %}
-        {% for category in site.categories %}
+      {% if site.filter == 'category' %}
+        {% for category in site.categories reversed %}
           <li class="sidebar-tag" data-filter="{{ category | first }}">{{ category | first }}</li>
         {% endfor %}
       {% elsif site.filter == 'tag' %}
