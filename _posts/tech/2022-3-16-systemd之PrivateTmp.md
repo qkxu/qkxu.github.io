@@ -2,7 +2,6 @@
 layout: post
 title: systemd之PrivateTmp
 category: VMM
-tags: VMM
 description: systemd之PrivateTmp
 ---
 #  systemd之PrivateTmp

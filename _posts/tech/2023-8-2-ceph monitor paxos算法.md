@@ -2,7 +2,6 @@
 layout: post
 title: ceph monitor paxos算法
 category: ceph
-tags: ceph
 ---
 
 # **ceph monitor paxos算法**

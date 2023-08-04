@@ -2,7 +2,6 @@
 layout: post
 title: CentOS 7 上编译安装Linux内核
 category: VMM
-tags: VMM
 description: CentOS 7 上编译安装Linux内核
 ---
 #  CentOS 7 上编译安装Linux内核

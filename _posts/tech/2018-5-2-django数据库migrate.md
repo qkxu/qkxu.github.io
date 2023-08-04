@@ -2,7 +2,6 @@
 layout: post
 title: django数据库migrate
 category: UI
-tags: django
 description: django数据库migrate
 ---
 # django数据库migrate#

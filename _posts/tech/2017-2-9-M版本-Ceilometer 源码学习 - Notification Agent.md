@@ -2,7 +2,6 @@
 layout: post
 title: Ceilometer 源码学习 - Notification Agent
 category: telemetry
-tags: ceilometer
 description: Ceilometer 源码学习 - Notification Agent
 ---
 # Ceilometer 源码学习 - Notification Agent

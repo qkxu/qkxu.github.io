@@ -2,7 +2,6 @@
 layout: post
 title: ceph mon清除rocksdb数据
 category: ceph
-tags: ceph
 ---
 
 # ceph mon清除rocksdb数据

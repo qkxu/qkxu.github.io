@@ -2,7 +2,6 @@
 layout: post
 title: Ceilometer 源码学习 - Polling Agent
 category: telemetry
-tags: ceilometer
 description: Ceilometer 源码学习 - Polling Agent组件
 ---
 # Ceilometer 源码学习 - Polling Agent

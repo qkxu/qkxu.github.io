@@ -2,7 +2,6 @@
 layout: post
 title: linux下的watchdog
 category: VMM
-tags: VMM
 description: linux下的watchdog
 ---
 #  linux下的watchdog

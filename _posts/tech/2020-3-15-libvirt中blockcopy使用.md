@@ -2,7 +2,6 @@
 layout: post
 title: libvirt中blockcopy使用
 category: VMM
-tags: VMM
 description: libvirt中blockcopy使用
 ---
 #  libvirt中blockcopy使用

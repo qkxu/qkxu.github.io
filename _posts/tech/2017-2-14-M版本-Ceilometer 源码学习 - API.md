@@ -2,7 +2,6 @@
 layout: post
 title: Ceilometer 源码学习 - API
 category: telemetry
-tags: ceilometer
 description: Ceilometer 源码学习 - API
 ---
 # Ceilometer 源码学习 - API#

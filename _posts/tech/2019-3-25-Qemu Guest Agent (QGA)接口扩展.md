@@ -2,7 +2,6 @@
 layout: post
 title: Qemu Guest Agent (QGA)接口扩展
 category: VMM
-tags: VMM
 description: Qemu Guest Agent (QGA)接口扩展
 ---
 #  Qemu Guest Agent (QGA)接口扩展

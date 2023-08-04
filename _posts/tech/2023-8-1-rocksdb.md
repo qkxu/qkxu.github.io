@@ -2,7 +2,6 @@
 layout: post
 title: rocksdb(Leveldb)
 category: ceph
-tags: ceph
 ---
 
 # **rocksdb**(Leveldb)

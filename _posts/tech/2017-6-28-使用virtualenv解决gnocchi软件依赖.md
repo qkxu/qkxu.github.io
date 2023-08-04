@@ -2,7 +2,6 @@
 layout: post
 title: 使用virtualenv解决gnocchi软件依赖
 category: telemetry
-tags: virtualenv
 description: 使用virtualenv解决gnocchi软件依赖
 ---
 # 使用virtualenv解决gnocchi软件依赖#

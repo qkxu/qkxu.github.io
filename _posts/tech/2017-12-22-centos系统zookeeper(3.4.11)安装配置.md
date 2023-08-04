@@ -2,7 +2,6 @@
 layout: post
 title: centos系统zookeeper安装配置
 category: telemetry
-tags: zookeeper
 description: centos系统zookeeper安装配置
 ---
 # centos系统zookeeper安装配置#

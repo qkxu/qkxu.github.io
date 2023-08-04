@@ -2,7 +2,6 @@
 layout: post
 title: Ceilometer 源码学习 - Collection
 category: telemetry
-tags: ceilometer
 description: Ceilometer 源码学习 - Collection
 ---
 # Ceilometer 源码学习 - Collection组件#

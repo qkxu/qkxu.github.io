@@ -2,7 +2,6 @@
 layout: post
 title: libvirt找不到支持kvm的guest
 category: VMM
-tags: VMM
 description: libvirt找不到支持kvm的guest
 ---
 #  libvirt找不到支持kvm的guest
