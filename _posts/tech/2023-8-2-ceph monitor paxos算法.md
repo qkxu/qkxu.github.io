@@ -129,7 +129,7 @@ begin：
 
 提案的内容可以利用**ceph-kvstore-tool**从rocksdb中看到
 
-ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
+ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
 
 然后用**ceph-dencoder**查看相关内容
 
@@ -384,7 +384,7 @@ void LogMonitor::update_from_paxos(bool *need_bootstrap)
 }
 ```
 
-ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ get logm full_292111 out /etc/ceph/logm_full_292111
+ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ get logm full_292111 out /etc/ceph/logm_full_292111
 
 ceph-dencoder type LogSummary import/etc/ceph/logm_full_292111 dump_json
 
@@ -396,7 +396,7 @@ logm / full_292112 记录的logsummury的内容，这个里面有诸多的LogEnt
     "tail_by_channel": {
         "": {
             "1": {
-                "name": "mon.Fitstor-1",
+                "name": "mon.ceph-1",
                 "rank": "mon.0",
                 "addrs": {
                     "addrvec": [
@@ -421,7 +421,7 @@ logm / full_292112 记录的logsummury的内容，这个里面有诸多的LogEnt
         },
         "audit": {
             "40823867": {
-                "name": "mon.fitstor3",
+                "name": "mon.ceph-3",
                 "rank": "mon.2",
                 "addrs": {
                     "addrvec": [

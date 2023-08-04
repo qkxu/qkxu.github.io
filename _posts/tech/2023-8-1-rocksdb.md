@@ -166,19 +166,19 @@ Level 4 —> 28G (前一天的全量数据)
 
 - 看到所有的prefix以及key
 
-  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ list 可以看到所有的prefix以及key
+  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ list 可以看到所有的prefix以及key
 
 - 根据prefix以及key导出具体的数据
 
-  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
+  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
 
 - 导出所有的key
 
-  ceph-monstore-tool /var/lib/ceph/mon/ceph-fitstor1/ dump-keys > /home/1.txt
+  ceph-monstore-tool /var/lib/ceph/mon/ceph-3/ dump-keys > /home/1.txt
 
 - 根据数据库名称导出所有值
 
-  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ dump logm > /home/logm
+  ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ dump logm > /home/logm
 
 更多的功能可以help下
 
@@ -192,7 +192,7 @@ ceph-dencoder的type类型很多，可以用ceph-dencoder list_types查看
 
 例如
 
-ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-fitstor3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
+ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
 
 ceph-dencoder type MonitorDBStore::Transaction import /etc/ceph/paxos_456221 dump_json
 

@@ -93,19 +93,19 @@ void PaxosService::maybe_trim()
 而言把debug日志级别提高则能看到相关的日志
 
 ```
-2023-07-27 16:11:42.674 7f09a1a50700 10 mon.fitstor1@0(leader).paxosservice(logm 249720..250473) maybe_trim trimming to 249973, 253 states
-2023-07-27 16:11:42.674 7f09a1a50700 10 mon.fitstor1@0(leader).paxosservice(logm 249720..250473) trim from 249720 to 249973
-2023-07-27 16:11:42.674 7f09a1a50700 20 mon.fitstor1@0(leader).paxosservice(logm 249720..250473) trim 249720
-2023-07-27 16:11:42.674 7f09a1a50700 20 mon.fitstor1@0(leader).paxosservice(logm 249720..250473) trim full_249720
-2023-07-27 16:11:42.674 7f09a1a50700 20 mon.fitstor1@0(leader).paxosservice(logm 249720..250473) trim 249721
+2023-07-27 16:11:42.674 7f09a1a50700 10 mon.ceph-1@0(leader).paxosservice(logm 249720..250473) maybe_trim trimming to 249973, 253 states
+2023-07-27 16:11:42.674 7f09a1a50700 10 mon.ceph-1@0(leader).paxosservice(logm 249720..250473) trim from 249720 to 249973
+2023-07-27 16:11:42.674 7f09a1a50700 20 mon.ceph-1@0(leader).paxosservice(logm 249720..250473) trim 249720
+2023-07-27 16:11:42.674 7f09a1a50700 20 mon.ceph-1@0(leader).paxosservice(logm 249720..250473) trim full_249720
+2023-07-27 16:11:42.674 7f09a1a50700 20 mon.ceph-1@0(leader).paxosservice(logm 249720..250473) trim 249721
 ```
 
 通知其他mon提案的内容大致为:
 
 ```json
-2023-07-28 17:00:58.415 7f13cf83f700 10 mon.fitstor2@1(peon).paxos(paxos updating c 517061..517812) handle_commit on 517813
-2023-07-28 17:00:58.415 7f13cf83f700 10 mon.fitstor2@1(peon).paxos(paxos updating c 517061..517813) store_state [517813..517813]
-2023-07-28 17:00:58.415 7f13cf83f700 30 mon.fitstor2@1(peon).paxos(paxos updating c 517061..517813) store_state transaction dump:
+2023-07-28 17:00:58.415 7f13cf83f700 10 mon.ceph-2@1(peon).paxos(paxos updating c 517061..517812) handle_commit on 517813
+2023-07-28 17:00:58.415 7f13cf83f700 10 mon.ceph-2@1(peon).paxos(paxos updating c 517061..517813) store_state [517813..517813]
+2023-07-28 17:00:58.415 7f13cf83f700 30 mon.ceph-2@1(peon).paxos(paxos updating c 517061..517813) store_state transaction dump:
 {
     "ops": [
         {
