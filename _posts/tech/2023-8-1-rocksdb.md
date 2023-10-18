@@ -193,7 +193,7 @@ ceph-dencoder的type类型很多，可以用ceph-dencoder list_types查看
 
 ceph-kvstore-tool rocksdb /var/lib/ceph/mon/ceph-3/store.db/ get paxos 456221 out /etc/ceph/paxos_456221
 
-ceph-dencoder type MonitorDBStore::Transaction import /etc/ceph/paxos_456221 dump_json
+ceph-dencoder type MonitorDBStore::Transaction import /etc/ceph/paxos_456221 decode dump_json
 
 ```
 {
